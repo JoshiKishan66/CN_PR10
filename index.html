@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="IoT-Based Environmental Monitoring System using ESP32, DHT22 and Wi-Fi" />
+    <title>AeroNex | IoT-Based Environmental Monitoring System using ESP32, DHT22 and Wi-Fi</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body data-theme="light">
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="brand-block">
+          <div class="brand-mark">A</div>
+          <div>
+            <h2>AeroNex</h2>
+            <small>Monitoring Platform</small>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="Sidebar navigation">
+          <button class="nav-item active" data-section="dashboard">Dashboard</button>
+          <button class="nav-item" data-section="live">Live Monitoring</button>
+          <button class="nav-item" data-section="alerts">Alerts</button>
+          <button class="nav-item" data-section="history">Data History</button>
+          <button class="nav-item" data-section="system">System Information</button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="device-pill">
+            <span class="status-dot online"></span>
+            ESP32 Online (Simulation)
+          </div>
+          <div class="wifi-pill">
+            <span class="signal-bars"></span>
+            Wi‑Fi Connected (Simulation)
+          </div>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div class="topbar-left">
+            <button id="sidebarToggle" class="nav-toggle" aria-label="Toggle Navigation" aria-expanded="true">☰</button>
+            <div>
+              <p class="eyebrow">PR-10 Environmental Monitoring</p>
+              <h1 id="pageTitle">Overview</h1>
+            </div>
+          </div>
+
+          <div class="topbar-right">
+            <div class="timechip">
+              <span class="label">Current Time</span>
+              <strong id="currentTime">--</strong>
+            </div>
+            <div class="status-chip">SIMULATION MODE</div>
+            <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+
+            <div class="user-pill">
+              <div class="avatar">K</div>
+              <div>
+                <strong>Kishan</strong>
+                <small>FieldOps</small>
+              </div>
+            </div>
+
+          </div>
+        </header>
+
+        <div class="page-content">
+          <section class="page-section active" id="dashboard-section">
+            <div class="section-header">
+              <div>
+                <p class="section-kicker">Dashboard</p>
+                <h2>Environmental Health</h2>
+              </div>
+            </div>
+
+            <div class="overview-grid">
+              <article class="panel large-panel">
+                <div class="score-card">
+                  <div class="score-ring" id="scoreRing">
+                    <div class="score-center">
+                      <strong id="environmentScore">82 / 100</strong>
+                      <span id="envScoreText">GOOD</span>
+                    </div>
+                  </div>
+                  <div class="score-copy">
+                    <p class="section-kicker">ENVIRONMENTAL HEALTH</p>
+                    <h3 id="healthTitle">Operating within target range</h3>
+                    <p id="healthMessage">Environmental conditions are currently comfortable.</p>
+                    <p id="cloudSyncStatus" class="simulated-note" role="status" aria-live="polite">Checking cloud connection...</p>
+                    <p class="overview-note">Environmental Status: <strong id="environmentStatus" class="status-tag normal">NORMAL</strong> · Wi-Fi: CONNECTED · Mode: SIMULATION</p>
+                  </div>
+                </div>
+              </article>
+
+            </div>
+
+            <div class="cards-grid">
+              <article class="panel stats-card">
+                <div class="stat-head">
+                  <span class="metric-icon temp">°C</span>
+                  <span id="temperatureStatus" class="status-tag normal">NORMAL</span>
+                </div>
+                <p class="label">Temperature</p>
+                <h3 id="tempMetricValue">24.0 °C</h3>
+                <div class="stat-footer"><span>ESP32 + DHT22</span><span>SIMULATED</span></div>
+              </article>
+
+              <article class="panel stats-card">
+                <div class="stat-head">
+                  <span class="metric-icon humid">%</span>
+                  <span id="humidityStatus" class="status-tag normal">NORMAL</span>
+                </div>
+                <p class="label">Humidity</p>
+                <h3 id="humidityMetricValue">40.0 %</h3>
+                <div class="stat-footer"><span>Last update</span><strong id="lastUpdate">--</strong></div>
+              </article>
+
+              <article class="panel stats-card">
+                <div class="stat-head">
+                  <span class="metric-icon comfort">E</span>
+                  <span class="status-tag good">ONLINE</span>
+                </div>
+                <p class="label">ESP32 Status</p>
+                <h3 id="esp32Status">ONLINE</h3>
+                <div class="stat-footer"><span>Wi-Fi</span><strong>CONNECTED (SIMULATED)</strong></div>
+              </article>
+
+              <article class="panel stats-card">
+                <div class="stat-head">
+                  <span class="metric-icon sensor">D</span>
+                  <span id="dht22Status" class="status-tag good">HEALTHY</span>
+                </div>
+                <p class="label">Sensor Health</p>
+                <h3>DHT22</h3>
+                <div class="stat-footer"><span>GPIO 15</span><span>3.3 V</span></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="page-section" id="live-section">
+            <div class="section-header">
+              <div>
+                <p class="section-kicker">Live Monitoring</p>
+                <h2>Temperature and Humidity</h2>
+              </div>
+              <button class="action-btn" id="toggleMonitoringBtn" aria-pressed="false">Pause Monitoring</button>
+            </div>
+
+            <div class="big-grid">
+              <article class="panel chart-panel">
+                <div class="panel-header compact">
+                  <h3>Temperature Graph</h3>
+                </div>
+                <div class="canvas-wrap"><canvas id="temperatureChart"></canvas></div>
+              </article>
+
+              <article class="panel chart-panel">
+                <div class="panel-header compact">
+                  <h3>Humidity Graph</h3>
+                </div>
+                <div class="canvas-wrap"><canvas id="humidityChart"></canvas></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="page-section" id="alerts-section">
+            <div class="section-header">
+              <div>
+                <p class="section-kicker">Sensor Status</p>
+                <h2>Environmental Alerts</h2>
+              </div>
+            </div>
+
+            <div class="panel history-panel table-wrap">
+              <table>
+                <thead><tr><th>Status</th><th>Sensor</th><th>Value</th><th>Time</th></tr></thead>
+                <tbody id="alertList"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="page-section" id="history-section">
+            <div class="section-header">
+              <div>
+                <p class="section-kicker">Data History</p>
+                <h2>Sensor Reading Log</h2>
+              </div>
+            </div>
+
+            <div class="panel history-panel">
+              <div class="history-controls">
+                <button id="exportCsvBtn" class="action-btn small">Export CSV</button>
+                <button id="clearHistoryBtn" class="action-btn small danger">Clear History</button>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Temperature</th>
+                      <th>Humidity</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="historyTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="page-section" id="system-section">
+            <div class="section-header">
+              <div>
+                <p class="section-kicker">System Information</p>
+                <h2>Architecture Overview</h2>
+              </div>
+            </div>
+
+            <div class="info-grid">
+              <article class="panel info-panel">
+                <h3>Project Details</h3>
+                <ul class="info-list">
+                  <li><span>Project</span><strong>IoT-Based Environmental Monitoring System using ESP32, DHT22 and Wi-Fi</strong></li>
+                  <li><span>Microcontroller</span><strong>ESP32</strong></li>
+                  <li><span>Sensor</span><strong>DHT22</strong></li>
+                  <li><span>Data Pin</span><strong>GPIO 15</strong></li>
+                  <li><span>Sensor Power</span><strong>3.3 V</strong></li>
+                  <li><span>Communication</span><strong>Wi-Fi</strong></li>
+                  <li><span>Network Protocol</span><strong>TCP/IP</strong></li>
+                  <li><span>Application Protocol</span><strong>HTTP</strong></li>
+                  <li><span>Simulation</span><strong>Wokwi</strong></li>
+                  <li><span>Mode</span><strong>SIMULATION</strong></li>
+                </ul>
+              </article>
+
+              <article class="panel info-panel">
+                <h3>Network</h3>
+                <ul class="info-list">
+                  <li><span>Wi-Fi</span><strong>CONNECTED (SIMULATED)</strong></li>
+                  <li><span>Protocol</span><strong>TCP/IP</strong></li>
+                  <li><span>Application</span><strong>HTTP</strong></li>
+                  <li><span>Gateway</span><strong>Wokwi Public Gateway</strong></li>
+                  <li><span>IP</span><strong>10.10.0.2</strong></li>
+                </ul>
+                <p class="simulated-note">Example/Simulated Wokwi IP. This is not your physical network IP.</p>
+              </article>
+
+              <article class="panel info-panel">
+                <h3>System Architecture</h3>
+                <div class="flow-diagram" aria-label="DHT22 to dashboard data path">
+                  <div class="flow-node">DHT22</div>
+                  <div class="flow-arrow">↓</div>
+                  <div class="flow-node">ESP32</div>
+                  <div class="flow-arrow">↓</div>
+                  <div class="flow-node">Wi-Fi</div>
+                  <div class="flow-arrow">↓</div>
+                  <div class="flow-node">TCP/IP + HTTP</div>
+                  <div class="flow-arrow">↓</div>
+                  <div class="flow-node">Web Dashboard</div>
+                </div>
+                <p class="simulated-note">The dashboard currently simulates readings locally. It does not receive live data from the Wokwi Public Gateway.</p>
+              </article>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div id="toastContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="/js/supabase.js"></script>
+    <script src="js/sensorService.js"></script>
+    <script src="js/history.js"></script>
+    <script src="js/alerts.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

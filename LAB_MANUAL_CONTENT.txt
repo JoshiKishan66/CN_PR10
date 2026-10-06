@@ -1,0 +1,38 @@
+IoT-Based Environmental Monitoring System using ESP32, DHT22 and Wi-Fi
+
+AIM
+To design and simulate an IoT-based environmental monitoring system using ESP32 and a DHT22 sensor, and display temperature and humidity information on a web dashboard.
+
+OBJECTIVES
+1. Interface a DHT22 sensor with ESP32.
+2. Read temperature and humidity values.
+3. Connect the ESP32 to Wi-Fi in Wokwi.
+4. Develop a web dashboard for monitoring sensor data.
+5. Display device status and recent sensor trends.
+
+SOFTWARE
+- Wokwi
+- Arduino/ESP32 code
+- Google Chrome / Microsoft Edge
+- HTML, CSS and JavaScript
+
+PIN CONNECTIONS
+DHT22 VCC -> ESP32 3V3
+DHT22 DATA -> ESP32 GPIO 15
+DHT22 GND -> ESP32 GND
+
+WORKING
+The DHT22 measures temperature and relative humidity. ESP32 reads the sensor through GPIO 15 and connects to Wi-Fi. The Wokwi simulation shows the readings through the Serial Monitor. The supplied web dashboard provides a user interface for monitoring these environmental parameters.
+
+NOTE
+The included dashboard is in Simulation Mode because Wokwi's Public Gateway does not allow incoming browser connections to a simulated ESP32 HTTP server. The dashboard therefore does not claim to be directly receiving live Wokwi values. A Private Gateway or real ESP32/API can be used later for direct live integration.
+
+EXPECTED SERIAL OUTPUT
+Wi-Fi Connected!
+IP Address: 10.10.0.2
+Web Server Started!
+Temperature: 24.00 °C
+Humidity: 40.00 %
+
+RESULT
+The ESP32 and DHT22 environmental monitoring system was successfully simulated, and a responsive web dashboard was prepared for displaying temperature, humidity and device status.
